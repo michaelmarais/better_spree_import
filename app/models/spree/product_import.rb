@@ -35,17 +35,16 @@ class Spree::ProductImport < Spree::Base
   def add_product_taxons(product, new_product) 
    if product.taxons.present? 
      seperate_taxons = product.taxons.split(",").map(&:strip)
-     taxon = seperate_taxons.map {|taxon_name| Spree::Taxon.find_by(name: taxon_name) }
-     unless taxon.nil? 
-       new_product.taxons << taxon 
-     end 
+     taxon = seperate_taxons.map {|taxon_name| find_taxon(taxon_name)}
+     
+     new_product.taxons << taxon if find_taxon(taxon).present? 
    end 
   end 
 
   def add_product_option_type(product, new_product) 
    if product.option_type.present? 
      product_option = product.option_type.split(",").map(&:strip)
-     option_type = product_option.map {|option_type| Spree::OptionType.find_by(name: option_type) }
+     option_type = product_option.map {|option_type| find_option_type(option_type) }
      new_product.option_types << option_type unless option_type.nil?
    end 
   end 
@@ -54,17 +53,24 @@ class Spree::ProductImport < Spree::Base
    if product.type.present? 
      product_option = product.type.split(",").map(&:strip)
      type = product_option.map {|property| find_property(property) }
-     if find_property(type).present?
-       new_product.product_properties << type 
-     end 
+     
+     new_product.product_properties << type if find_property(type).present? 
    end 
   end 
 
   private 
 
   def find_property(property)
-    Spree::ProductProperty.find_by(value: property)
+    Spree::ProductProperty.joins(:translations).find_by(value: property)
   end 
+
+  def find_option_type(option_type)
+    Spree::OptionType.joins(:translations).find_by(name: option_type) 
+  end 
+
+  def find_taxon(taxon)
+    Spree::Taxon.joins(:translations).find_by(name: taxon) 
+  end
 
   def import_products 
     options = {headers: true, header_converters: :symbol, skip_blanks: true}

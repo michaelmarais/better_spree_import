@@ -1,4 +1,16 @@
 GIT
+  remote: git://github.com/dgross881/spree_i18n-1.git
+  revision: e098a8dbe8f0c48935da31ed0b4b720081f756e1
+  branch: 3-0-ransack-translations
+  specs:
+    spree_i18n (3.0.0)
+      friendly_id-globalize
+      globalize (~> 5.0.1)
+      i18n_data (~> 0.5.1)
+      rails-i18n (~> 4.0.1)
+      spree_core (~> 3.0.0.beta)
+
+GIT
   remote: git://github.com/spree/spree.git
   revision: 0959c62971c1274aa32f2a72ca08c171f6797278
   branch: 3-0-stable
@@ -122,6 +134,8 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    acts-as-taggable-on (3.4.4)
+      activerecord (>= 3.2, < 5)
     acts_as_list (0.7.2)
       activerecord (>= 3.0)
     addressable (2.3.8)
@@ -201,8 +215,13 @@ GEM
       railties (>= 3.2, < 5.0)
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
+    friendly_id-globalize (1.0.0.alpha2)
+      friendly_id (~> 5.1.0, < 6.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
+    globalize (5.0.1)
+      activemodel (>= 4.2.0, < 4.3)
+      activerecord (>= 4.2.0, < 4.3)
     highline (1.6.21)
     hike (1.2.3)
     htmlentities (4.3.4)
@@ -210,6 +229,7 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
+    i18n_data (0.5.1)
     jquery-rails (4.0.4)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -288,6 +308,9 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.2)
       loofah (~> 2.0)
+    rails-i18n (4.0.4)
+      i18n (~> 0.6)
+      railties (~> 4.0)
     railties (4.2.3)
       actionpack (= 4.2.3)
       activesupport (= 4.2.3)
@@ -392,6 +415,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts-as-taggable-on
   capybara
   coffee-rails
   database_cleaner
@@ -408,6 +432,7 @@ DEPENDENCIES
   simplecov
   spree!
   spree_auth_devise!
+  spree_i18n!
   spree_import!
   sqlite3
   webmock
