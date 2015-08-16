@@ -23,6 +23,16 @@ describe Spree::ProductImport do
      translated_product_import.add_products!
      expect(Spree::Product.count).to eq 1 
    end
+
+   context 'Update Product by finding slug' do 
+     it "succesfullys updates a product based off the slug" do 
+     product = create(:base_product, slug: 'product1')
+     update_product = create(:product_import, csv_import: update_products, csv_import_content_type: 'text/csv', preferences: { update_products: true })
+     update_product.add_products!
+     product.reload
+     expect(product.name).to eq('QuillingCard')
+     end 
+   end 
  end 
 
  describe 'add_globalize_product!' do 
@@ -41,10 +51,12 @@ describe Spree::ProductImport do
 
    context "update variants" do 
     it "updates a variant that has already been added" do 
-       new_variant = create(:base_variant, sku: "SKU-2")
+       new_variant = create(:base_variant, sku: "SKU-3")
        variant_update = create(:product_import, csv_import: update_variants_import , csv_import_content_type: 'text/csv', preferences: {update_variants: true })
        variant_update.add_variants!
-       expect(new_variant.stock_items_count).to eq 6
+       new_variant.stock_items.each do |stock_item|
+         expect(stock_item.count_on_hand).to eq 5
+       end
      end 
    end
  end 

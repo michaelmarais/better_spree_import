@@ -23,12 +23,16 @@ module Spree
        @promotionable =  csv_row[:promotionable]
        @meta_title = csv_row[:meta_title] 
        @cn_meta_title = csv_row[:cn_meta_title]
-       @price = csv_row[:price].to_i
+       @price = remove_zeros(csv_row[:price].to_i)
        @vendor = csv_row[:vendor]
        @product_tags = csv_row[:product_tags]
        @type = csv_row[:type]
        @option_type = csv_row[:option_type]
        @taxons = csv_row[:taxons]
     end
+
+    def remove_zeros(csv)
+      csv.equal?(0) || csv.equal?(0.00) ? nil : csv 
+    end 
   end
 end 

@@ -3,7 +3,6 @@ module CsvHelpers
       VARIANT_HEADERS = "sku, weight, height, width, depth, is_master, product_slug, cost_price, cost_currency, track_inventory, stock_items_count\r\n" 
       PRODUCTS = "slug, cn_slug, name, cn_name, description, cn_description, price, product_tags, meta_title, cn_meta_title, meta_description, cn_meta_description, meta_keywords, vendor, option_type, type, taxons\r\n"
 
-
       def successfull_import
          @rows = ["quillingcard-greetingcard-small-love, Daves Quilling Cards,  Daves Quilling Cards Rooted in Vietnam each artist is assigned to a single design, 24.00, Small Love Cards from Quilling Card, quilling-card, recycled quilling cards, cards paper, the squirrelz, Graphic, Greeting Cart, The Taxon\r\n"]
         StringIO.new.tap do |sio|
@@ -41,12 +40,21 @@ module CsvHelpers
       end 
 
       def update_variants_import
-        @rows = ["SKU-2, 2.2, , , , , , , , , 5\r\n"]
+        @rows = ["SKU-3,,,,,,,,,,5\r\n"]
         StringIO.new.tap do |sio|
           sio << VARIANT_HEADERS
           @rows.each { |row| sio << row }
-          sio.rewind
+          sio.rewind 
         end
       end 
+
+      def update_products 
+         @rows = ["product1,,QuillingCard,,,Small Love Cards from Quilling Card, quilling-card, recycled quilling cards, cards paper,,, Greeting Cart\r\n"]
+        StringIO.new.tap do |sio|
+          sio << PRODUCTS
+          @rows.each { |row| sio << row }
+          sio.rewind 
+        end
+      end
     end 
   end 
