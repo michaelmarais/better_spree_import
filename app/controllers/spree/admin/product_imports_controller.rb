@@ -4,6 +4,7 @@ module Spree
       def create
         @product_import = Spree::ProductImport.create(csv_import_params)
         if @product_import.save
+          @product_import.add_products!
           product_or_variant_import
 
           flash[:success] = "You have successfuly Imported products" 
@@ -19,7 +20,6 @@ module Spree
 
     def product_or_variant_import
       if @product_import.has_preference?(:import_products)
-        @product_import.add_products!
       elsif @product_import.has_preference?(:upload_variants) 
         @product_import.add_products!
       end 

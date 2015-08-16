@@ -7,7 +7,7 @@ module Spree
                   :meta_title, :price, :vendor, :option1, :option2, 
                   :weight, :quantity, :product_tags, :type, :option_value,
                   :taxons, :option_type, :cn_name, :cn_description,
-                  :cn_meta_description, :cn_meta_keywords, :cn_meta_title
+                  :cn_meta_description, :cn_meta_title, :cn_meta_keywords
 
     def initialize(csv_row)
        @name = csv_row[:name]
@@ -22,7 +22,7 @@ module Spree
        @cn_meta_keywords = csv_row[:cn_meta_keywords]
        @promotionable =  csv_row[:promotionable]
        @meta_title = csv_row[:meta_title] 
-       @cn_meta_title = csv_row[:meta_title]
+       @cn_meta_title = csv_row[:cn_meta_title]
        @price = csv_row[:price].to_i
        @vendor = csv_row[:vendor]
        @product_tags = csv_row[:product_tags]

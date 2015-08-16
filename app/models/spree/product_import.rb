@@ -1,18 +1,18 @@
 require 'csv'
 
 class Spree::ProductImport < Spree::Base 
-  preference :upload_products, :boolean, :default_false
-  preference :translate_products, :boolean, :default_false 
-  preference :upload_variants, :boolean, :default_false 
-  preferenct :update_variants, :boolean, :default_false
+  preference :upload_products, :boolean, default: false
+  preference :translate_products, :boolean, default: false 
+  preference :upload_variants, :boolean, default: false 
+  preference :update_variants, :boolean, default: false
 
   has_attached_file :csv_import, :path => ":rails_root/lib/etc/product_data/data-files/:basename.:extension"
   validates_attachment :csv_import, presence: true,
 	    :content_type => { content_type: 'text/csv' }
 
   def add_products!
-    import_products 
-    #new_product =  product.instance_values.symbolize_keys.reject {|key, value| !Spree::Product.attribute_method?(key) || value.nil? }
+    import_products
+
     products = @products_csv.map { |product|  Spree::ImportProduct.new(product)  }
 
     products.each do |product|
@@ -22,7 +22,7 @@ class Spree::ProductImport < Spree::Base
                                      available_on: Time.zone.now, price: product.price,
                                      shipping_category: Spree::ShippingCategory.find_by!(name: 'Shipping'))
 
-      add_translations(new_product, product) if has_preference?(:translate_products)
+      add_translations(new_product, product) if preferred_translate_products
 
       new_product.tag_list = product.product_tags
       new_product.slug = product.slug
@@ -35,23 +35,19 @@ class Spree::ProductImport < Spree::Base
   end
 
   def add_variants! 
-    import_products
-    variants = @products_csv.map { |variant|  Spree::ImportVariant.new(variant)  }
-   if has_preferenc?(:update_variants)
-      variants.each do |variant|
-        clean_variant = variant.instance_values.symbolize_keys.reject {|key, value| !Spree::Variant.attribute_method?(key) || value.nil? }
-        find_variant = Spree::Variant.find_by(sku: variant.sku.split)
-        find_variant.update_attributes(clean_variants)
-      end 
-   else
-    variants.each do |variant|
-      clean_variant = variant.instance_values.symbolize_keys.reject {|key, value| !Spree::Variant.attribute_method?(key) || value.nil? }
-      new_variant = Spree::Variant.new(clean_variant)
-      new_variant.product = Spree::Product.find_by(slug: variant.product_slug.split)
-      new_variant.save!
+     import_products
+     variants = @products_csv.map { |variant|  Spree::ImportVariant.new(variant)  }
+     variants.each do |variant|
+       if preferred_update_variants
+          find_variant = Spree::Variant.find_by(sku: variant.sku.split)
+          find_variant.update_attributes(clean_variant(variant))
+       else 
+          new_variant = Spree::Variant.new(clean_variant(variant))
+          new_variant.product = Spree::Product.find_by(slug: variant.product_slug.split)
+          new_variant.save!
+       end 
     end 
   end
-
 
   #repeating too much can try and make this one method 
   def add_product_taxons(product, new_product) 
@@ -82,6 +78,10 @@ class Spree::ProductImport < Spree::Base
 
   private 
 
+  def clean_variant(variant)
+    variant.instance_values.symbolize_keys.reject {|key, value| !Spree::Variant.attribute_method?(key) || value.nil? }
+  end 
+
   def find_property(property)
     Spree::ProductProperty.joins(:translations).find_by(value: property)
   end 
@@ -94,14 +94,15 @@ class Spree::ProductImport < Spree::Base
     Spree::Taxon.joins(:translations).find_by(name: taxon) 
   end
 
-  def import_products 
-    options = {headers: true, header_converters: :symbol, skip_blanks: true}
-    @products_csv = CSV.read(self.csv_import.path, options)
-  end
 
   def add_translations(new_product, product) 
      product_translation = new_product.update_attributes(name: product.cn_name, description: product.cn_description,
                                  meta_title: product.cn_meta_title, meta_description: product.cn_meta_description, 
                                  meta_keywords: product.cn_meta_keywords, locale: :cn)
+  end
+  
+  def import_products 
+    options = {headers: true, header_converters: :symbol, skip_blanks: true}
+    @products_csv = CSV.read(self.csv_import.path, options)
   end
 end
