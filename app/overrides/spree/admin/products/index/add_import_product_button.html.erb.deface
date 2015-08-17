@@ -11,6 +11,19 @@
       <%= f.check_box :update_variants %>
       <%= f.error_message_on :csv_import %>
     <% end %>
+
+   <%= f.fields_for :preferences, OpenStruct.new(f.object.preferences) do |p| %>
+      <%= p.label :upload_products  %>
+      <%= p.check_box :upload_products %>
+      <%= p.label :update_products %>
+      <%= p.check_box :update_products %>
+      <%= p.label :translate_products %>
+      <%= p.check_box :translate_products %>
+      <%= p.label :upload_variants %>
+      <%= p.check_box :upload_variants %>
+      <%= p.label :update_variants %>
+      <%= p.check_box :update_variants %>
+   <% end %>
   </fieldset>
     <p class="form-buttons">
       <%= button t("actions.create") %>

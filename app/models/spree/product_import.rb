@@ -14,7 +14,6 @@ class Spree::ProductImport < Spree::Base
     import_products
 
     products = @products_csv.map { |product|  Spree::ImportProduct.new(product)  }
-
     products.each do |product|
      if preferred_update_products
        clean = product.instance_values.symbolize_keys.reject {|key, value| !Spree::Product.attribute_method?(key) || value.nil?}
