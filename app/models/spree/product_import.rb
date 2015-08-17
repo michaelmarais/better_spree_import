@@ -4,8 +4,6 @@ class Spree::ProductImport < Spree::Base
   preference :upload_products, :boolean, default: false
   preference :upload_variants, :boolean, default: false 
   preference :translate_products, :boolean, default: false 
-  preference :update_variants, :boolean, default: false
-  preference :update_products, :boolean, default: false 
 
   has_attached_file :csv_import, :path => ":rails_root/lib/etc/product_data/data-files/:basename.:extension"
   validates_attachment :csv_import, presence: true, :content_type => { content_type: 'text/csv' }
@@ -20,7 +18,6 @@ class Spree::ProductImport < Spree::Base
        clean = product.instance_values.symbolize_keys.reject {|key, value| !Spree::Product.attribute_method?(key) || value.nil?}
        find_product.update_attributes(clean)
      else 
-
      new_product = Spree::Product.create!(name: product.name, description: product.description,
                                      meta_title: product.meta_title, meta_description: product.meta_description,
                                      meta_keywords: "#{product.slug}, #{product.name}, the Squirrelz",
@@ -28,7 +25,6 @@ class Spree::ProductImport < Spree::Base
                                      shipping_category: Spree::ShippingCategory.find_by!(name: 'Shipping'))
 
       add_translations(new_product, product) if preferred_translate_products
-
       new_product.tag_list = product.product_tags
       new_product.slug = product.slug
       add_product_option_type(product, new_product)
