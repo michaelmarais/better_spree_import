@@ -8,11 +8,11 @@
       <%= f.error_message_on :csv_import %>
     <% end %>
 
-   <% f.object.preferences.keys.map do |key|  %>
-     <% field_name = "#{@product_import}[product_import][preferred_#{key}]" %>
-     <%= label_tag field_name, "#{key}".to_s %>
-     <%= preference_field_for(f, f.object.preference_type(key)), f.object.get_preference(key)) %>
-   <% end %>
+  <% f.object.preferences.keys.map do |key|  %>
+    <% field_name = "product_import[preferred_#{key}]" %>
+    <%= label_tag field_name, "#{key}".to_s %>
+    <%= preference_field_tag(field_name, f.object.get_preference(key), type: :boolean) %>
+  <% end %>
 
   </fieldset>
     <p class="form-buttons">
