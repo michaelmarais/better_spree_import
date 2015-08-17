@@ -4,11 +4,6 @@
     <%= f.field_container :csv_import do %>
       <%= f.label :csv_import, Spree.t(:csv_import) %>
       <%= f.file_field :csv_import %>
-      <%= f.check_box :upload_products %>
-      <%= f.check_box :update_products %>
-      <%= f.check_box :translate_products %>
-      <%= f.check_box :upload_variants %>
-      <%= f.check_box :update_variants %>
       <%= f.error_message_on :csv_import %>
     <% end %>
 
