@@ -23,7 +23,7 @@ class Spree::ProductImport < Spree::Base
      new_product = Spree::Product.create!(name: product.name, description: product.description,
                                      meta_title: product.meta_title, meta_description: product.meta_description,
                                      meta_keywords: "#{product.slug}, #{product.name}, the Squirrelz",
-                                     available_on: Time.zone.now, price: product.price,
+                                     available_on: Time.zone.now, price: product.price, cost_price: product.price,
                                      shipping_category: Spree::ShippingCategory.find_by!(name: 'Shipping'))
 
       add_translations(new_product, product) if preferred_translate_products
