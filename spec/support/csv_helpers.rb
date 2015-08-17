@@ -40,7 +40,7 @@ module CsvHelpers
       end 
 
       def update_variants_import
-        @rows = ["SKU-3,,,,,,,,,,5\r\n"]
+        @rows = ["SKU-20,,,,,,,,,,5\r\n"]
         StringIO.new.tap do |sio|
           sio << VARIANT_HEADERS
           @rows.each { |row| sio << row }

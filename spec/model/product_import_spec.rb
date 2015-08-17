@@ -51,7 +51,7 @@ describe Spree::ProductImport do
 
    context "update variants" do 
     it "updates a variant that has already been added" do 
-       new_variant = create(:base_variant, sku: "SKU-3")
+       new_variant = create(:base_variant, sku: "SKU-20")
        variant_update = create(:product_import, csv_import: update_variants_import , csv_import_content_type: 'text/csv', preferences: {update_variants: true })
        variant_update.add_variants!
        new_variant.stock_items.each do |stock_item|

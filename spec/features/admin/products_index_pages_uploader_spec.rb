@@ -10,7 +10,7 @@ describe "Products", type: :feature do
     end 
 
     it "allows user to import a product" do 
-      expect(page).to have_content("CSV Import")
+      expect(page).to have_content("Import")
     end
 
     it "successfully uploads and stores data in the database" do 
