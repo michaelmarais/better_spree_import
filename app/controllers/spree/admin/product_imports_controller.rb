@@ -18,7 +18,7 @@ module Spree
     private 
 
       def csv_import_params
-        params.require(:product_import).permit(:csv_import, :preferences => [:upload_products, :update_products])
+        params.require(:product_import).permit(:csv_import, :preferred_upload_products, :preferred_upload_variants, :preferred_translate_products, :preferred_update_variants, :preferred_update_products)
       end 
     end 
   end 
