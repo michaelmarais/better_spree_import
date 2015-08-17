@@ -2,11 +2,16 @@ require 'csv'
 
 class Spree::ProductImport < Spree::Base 
   preference :upload_products, :boolean, default: false
-  preference :upload_variants, :boolean, default: false 
+  preference :upload_variants, :boolean, default: false
   preference :translate_products, :boolean, default: false 
+
 
   has_attached_file :csv_import, :path => ":rails_root/lib/etc/product_data/data-files/:basename.:extension"
   validates_attachment :csv_import, presence: true, :content_type => { content_type: 'text/csv' }
+
+  validates_inclusion_of :preferred_upload_variants, in: [true], if: lambda {|u| !u.preferred_upload_products }
+  validates_inclusion_of :preferred_upload_products, in: [true], if: lambda {|u| !u.preferred_upload_variants }
+
 
   def add_products!
     import_products
