@@ -15,11 +15,12 @@ class Spree::ProductImport < Spree::Base
 
     products = @products_csv.map { |product|  Spree::ImportProduct.new(product)  }
     products.each do |product|
-     if preferred_update_products
+     find_product = Spree::Product.find_by(slug: product.slug)
+     if find_product
        clean = product.instance_values.symbolize_keys.reject {|key, value| !Spree::Product.attribute_method?(key) || value.nil?}
-       find_product = Spree::Product.find_by(slug: product.slug)
        find_product.update_attributes(clean)
      else 
+
      new_product = Spree::Product.create!(name: product.name, description: product.description,
                                      meta_title: product.meta_title, meta_description: product.meta_description,
                                      meta_keywords: "#{product.slug}, #{product.name}, the Squirrelz",
@@ -27,6 +28,7 @@ class Spree::ProductImport < Spree::Base
                                      shipping_category: Spree::ShippingCategory.find_by!(name: 'Shipping'))
 
       add_translations(new_product, product) if preferred_translate_products
+
       new_product.tag_list = product.product_tags
       new_product.slug = product.slug
       add_product_option_type(product, new_product)
@@ -42,9 +44,9 @@ class Spree::ProductImport < Spree::Base
      variants = @products_csv.map { |variant|  Spree::ImportVariant.new(variant)  } 
 
      variants.each do |variant|
-       if preferred_update_variants
+       find_variant = Spree::Variant.find_by(sku: variant.sku.split)
+       if find_variant
           clean = variant.instance_values.symbolize_keys.reject {|key, value| !Spree::Variant.attribute_method?(key) || value.nil? }
-          find_variant = Spree::Variant.find_by(sku: variant.sku.split)
           find_variant.update_attributes(clean)
           find_variant.stock_items.each do |stock_item|
             Spree::StockMovement.create(quantity: variant.stock_items_count, stock_item: stock_item)

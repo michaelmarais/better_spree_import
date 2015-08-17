@@ -1,5 +1,6 @@
 <!-- insert_after 'erb:contains("content_for :page_actions do")' -->
 <%= form_for [:admin, @product_import], :method => :post, :html => { :multipart => true } do |f| %>
+
   <fieldset>
     <%= f.field_container :csv_import do %>
       <%= f.label :csv_import, Spree.t(:csv_import) %>
@@ -10,7 +11,7 @@
    <% f.object.preferences.keys.map do |key|  %>
      <% field_name = "#{@product_import}[product_import][preferred_#{key}]" %>
      <%= label_tag field_name, "#{key}".to_s %>
-     <%= preference_field_tag(field_name, f.object.get_preference(key), type: :boolean) %>
+     <%= preference_field_for(f, f.object.preference_type(key)), f.object.get_preference(key)) %>
    <% end %>
 
   </fieldset>
