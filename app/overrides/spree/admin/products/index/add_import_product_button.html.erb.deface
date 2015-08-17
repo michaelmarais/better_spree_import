@@ -7,18 +7,12 @@
       <%= f.error_message_on :csv_import %>
     <% end %>
 
-   <%= f.fields_for :preferences, OpenStruct.new(f.object.preferences) do |p| %>
-      <%= p.label :upload_products  %>
-      <%= p.check_box :upload_products %>
-      <%= p.label :update_products %>
-      <%= p.check_box :update_products %>
-      <%= p.label :translate_products %>
-      <%= p.check_box :translate_products %>
-      <%= p.label :upload_variants %>
-      <%= p.check_box :upload_variants %>
-      <%= p.label :update_variants %>
-      <%= p.check_box :update_variants %>
+   <% f.object.preferences.keys.map do |key|  %>
+     <% field_name = "#{@product_import}[product_import][preferred_#{key}]" %>
+     <%= label_tag field_name, "#{key}".to_s %>
+     <%= preference_field_tag(field_name, f.object.get_preference(key), type: :boolean) %>
    <% end %>
+
   </fieldset>
     <p class="form-buttons">
       <%= button t("actions.create") %>
