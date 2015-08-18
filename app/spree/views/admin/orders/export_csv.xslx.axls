@@ -1,0 +1,81 @@
+require 'axlsx'
+
+p = xlsx_package
+wb = p.workbook
+
+options = {headers: true, header_converters: :symbol, skip_blanks: true}
+wb.add_worksheet(name: "david") do |sheet|
+  border = {border: {style: :thin, color: '000000'}}
+  bn_row = wb.styles.add_style border.merge({b: true, bg_color: 'D9EDF7', sz: 13})
+  b_cell = wb.styles.add_style border
+
+  head_row = wb.styles.add_style border.merge({b: true, bg_color: 'F5F5F5'})
+  cell = wb.styles.add_style border.merge({alignment: {vertical: :top}})
+  center = wb.styles.add_style border.merge({alignment: {horizontal: :center, vertical: :top}})
+
+ @orders.each do |order|
+  sheet.add_row ['id', 'order', 'firstname', 'lastname', 
+                 'total', 'promo total', 'address1', 'address2', 
+                       'city', 'zipcode', 
+                    'phone', 'state_name', 
+                  "alternative_phone", "company",
+                  "state", "shipment_state", 
+                  "email", "user_id", "completed_at", 
+                  "payment_state", "special_instructions" 
+                 ], style: head_row
+
+      id = order.id 
+      number =  order.number
+      promo_total = Spree::Money.new(order.promo_total, {currency: order.currency})
+      total =   Spree::Money.new(order.total, {currency: order.currency})
+      state =   order.state
+      shipment_state =  order.shipment_state
+      email =   order.email 
+      user_id = order.user_id
+      completed_at =  order.completed_at.strftime("%m-%d-%Y")
+      payment_state =  order.payment_state
+      special_instructions = order.special_instructions
+      firstname =  order.shipping_address.firstname 
+      lastname  =  order.shipping_address.lastname
+      address1  =  order.shipping_address.address1
+      address2  =  order.shipping_address.address2 
+          city  =  order.shipping_address.city 
+       zipcode  =  order.shipping_address.zipcode 
+         phone  =  order.shipping_address.phone 
+   alternative_phone = order.shipping_address.alternative_phone 
+        company = order.shipping_address.company
+   state_name   =  order.state_name 
+
+   row = sheet.add_row([id, number, firstname, lastname, 
+                        total, promo_total, address1, address2, 
+                       city, zipcode, 
+                    phone, state_name, 
+                  alternative_phone, company,
+                  state, shipment_state, 
+                  email, user_id, completed_at, 
+                  payment_state, special_instructions 
+                 ], style: [cell, cell, cell, cell, cell, cell, cell, cell, cell, cell, cell,  cell, cell, cell, cell, cell, cell, cell, cell, cell])
+
+         sheet.add_row ["order", "vendor", 
+                         "name", "sku", 
+                         "price", "quantity"
+                        ], style: head_row
+
+       order.line_items.each do |product| 
+          number = order.number 
+          name = product.name 
+          sku =  product.sku
+          quantity = product.quantity
+          price =  product.single_money.to_html
+          vendor = product.product.vendor
+
+        row = sheet.add_row([number, vendor,
+                                  name, sku, 
+                                  price, quantity
+                                ], style: [cell, cell, cell, cell, cell, cell, cell, cell, cell])
+
+    end 
+    sheet.add_row
+    sheet.add_row
+  end 
+end

@@ -1,5 +1,5 @@
-#source 'https://rubygems.org'
-source 'http://ruby.taobao.org/'
+source 'http://rubygems.org'
+#source 'https://ruby.taobao.org/'
 
 
 group :test,:development do
@@ -12,6 +12,7 @@ group :test,:development do
   gem 'delayed_job_active_record'
   gem 'paperclip'
   gem 'acts-as-taggable-on'
+  gem 'axlsx_rails'
 end
 
 gemspec
