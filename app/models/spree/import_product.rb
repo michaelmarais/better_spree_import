@@ -6,8 +6,9 @@ module Spree
                   :meta_keywords, :meta_keywords, :promotionable,
                   :meta_title, :price, :vendor, :option1, :option2, 
                   :weight, :quantity, :product_tags, :type, :option_value,
-                  :taxons, :option_type, :cn_name, :cn_description,
-                  :cn_meta_description, :cn_meta_title, :cn_meta_keywords
+                  :product_taxons, :option_type, :cn_name, :cn_description,
+                  :cn_meta_description, :cn_meta_title, :cn_meta_keywords,
+                  :spree_property, :product_property
 
     def initialize(csv_row)
        @name = csv_row[:name]
@@ -26,9 +27,10 @@ module Spree
        @price = remove_zeros(csv_row[:price].to_i)
        @vendor = csv_row[:vendor]
        @product_tags = csv_row[:product_tags]
-       @type = csv_row[:type]
+       @spree_property = csv_row[:spree_property]
+       @product_property = csv_row[:product_property]
        @option_type = csv_row[:option_type]
-       @taxons = csv_row[:taxons]
+       @product_taxons = csv_row[:product_taxons]
     end
 
     def remove_zeros(csv)

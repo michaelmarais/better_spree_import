@@ -14,7 +14,7 @@
     <div class="import-choice">
       <% f.object.preferences.keys.map do |key|  %>
         <% field_name = "product_import[preferred_#{key}]" %>
-        <%= preference_field_tag(field_name, f.object.get_preference(key), type: :boolean) %> <%= label_tag(field_name, "#{key}".to_s) %><br/>
+        <%= preference_field_tag(field_name, f.object.get_preference(key), type: :boolean) %> <%= label_tag(field_name, "#{key}".to_s.humanize) %><br/>
       <% end %>
     </div>
 
