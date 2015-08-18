@@ -82,16 +82,15 @@ describe Spree::ProductImport do
          update_product = create(:product_import, csv_import: update_products, csv_import_content_type: 'text/csv', preferences: { upload_products: true })
          update_product.add_products!
          product.reload
-         expect(product.properties.first.value).to eq "Card" 
+         expect(product.product_properties.first.value).to eq "Card" 
        end 
 
        it "It does add a property if it already exists in the product" do 
          product = create(:base_product, slug: 'product1', name: "product-1")
-         product.properties << property
          update_product = create(:product_import, csv_import: update_products, csv_import_content_type: 'text/csv', preferences: { upload_products: true })
          update_product.add_products!
          product.reload
-         expect(product.properties.count).to eq 1
+         expect(product.properties.count).to eq 1 
        end 
     end 
   end 

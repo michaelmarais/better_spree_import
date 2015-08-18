@@ -92,7 +92,7 @@ class Spree::ProductImport < Spree::Base
 
      properties.map do |property| 
        seperate_product_properties.map do |product_property| 
-         Spree::ProductProperty.create!(property: property, value: product_property, product: new_product)  
+         Spree::ProductProperty.create!(property: property, value: product_property, product: new_product) if product_property
        end 
      end 
    end 
@@ -105,7 +105,7 @@ class Spree::ProductImport < Spree::Base
   end 
 
   def find_property(property)
-    Spree::Property.joins(:translations).find_by(name: property)
+    Spree::Property.joins(:translations).find_or_create_by(name: property)
   end 
   
 
