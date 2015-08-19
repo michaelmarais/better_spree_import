@@ -1,17 +1,16 @@
 require 'csv'
 
-class Spree::ProductImport < Spree::Base 
+class Spree::ProductImport < Spree::Base
   preference :upload_products, :boolean, default: false
   preference :upload_variants, :boolean, default: false
-  preference :translate_products, :boolean, default: false 
+  preference :translate_products, :boolean, default: false
 
+  has_attached_file :csv_import, path: ':rails_root/lib/etc/product_data/data-files/:basename.:extension'
+  validates_attachment_presence :csv_import, message: 'Include file to import!'
+  validates_attachment_content_type :csv_import, content_type: 'text/csv', message: 'You can only include CSV file!'
 
-  has_attached_file :csv_import, :path => ":rails_root/lib/etc/product_data/data-files/:basename.:extension"
-  validates_attachment :csv_import, presence: true, :content_type => { content_type: 'text/csv' }
-
-  validates_inclusion_of :preferred_upload_variants, in: [true], if: lambda {|u| !u.preferred_upload_products },  message: "What are you doing Walt! Choose to Upload products or Variants!" 
-  validates_inclusion_of :preferred_upload_products, in: [true], if: lambda {|u| !u.preferred_upload_variants },  message: "What are you doing Walt! Choose to Upload either products or Variants!"
-
+  validates_inclusion_of :preferred_upload_variants, in: [true], if: lambda {|u| !u.preferred_upload_products }, message: 'Choose to Upload either Products or Variants!'
+  validates_inclusion_of :preferred_upload_products, in: [true], if: lambda {|u| !u.preferred_upload_variants }, message: 'Choose to Upload either Products or Variants!'
 
   def add_products!
     import_products

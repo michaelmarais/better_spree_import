@@ -19,10 +19,10 @@ module Spree
        @cn_slug = csv_row[:slug]
        @meta_description = csv_row[:meta_description]
        @cn_meta_description = csv_row[:cn_meta_description]
-       @meta_keywords = csv_row[:meta_keywords] 
+       @meta_keywords = csv_row[:meta_keywords]
        @cn_meta_keywords = csv_row[:cn_meta_keywords]
        @promotionable =  csv_row[:promotionable]
-       @meta_title = csv_row[:meta_title] 
+       @meta_title = csv_row[:meta_title]
        @cn_meta_title = csv_row[:cn_meta_title]
        @price = remove_zeros(csv_row[:price].to_i)
        @vendor = csv_row[:vendor]
@@ -34,7 +34,7 @@ module Spree
     end
 
     def remove_zeros(csv)
-      csv.equal?(0) || csv.equal?(0.00) ? nil : csv 
-    end 
+      csv.equal?(0) || csv.equal?(0.00) ? nil : csv
+    end
   end
-end 
+end
