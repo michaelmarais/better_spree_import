@@ -13,6 +13,10 @@ group :test,:development do
   gem 'paperclip'
   gem 'acts-as-taggable-on'
   gem 'axlsx_rails'
+  gem 'zip-zip'
+  gem 'roo'
+  gem 'roo-xls'
+#  gem 'spreadsheet'
 end
 
 gemspec

@@ -18,10 +18,11 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
   
+  s.add_dependency 'delayed_job_active_record'
   s.add_dependency 'spree_core', '~> 3.0.0'
   s.add_dependency "rails", "~> 4.2.2"
-  s.add_dependency 'delayed_job_active_record'
   s.add_dependency 'axlsx_rails'
+  s.add_dependency 'roo'
 
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'capybara'

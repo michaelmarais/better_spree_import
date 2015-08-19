@@ -1,4 +1,6 @@
 require 'csv'
+require 'roo'
+#require 'spreadsheet'
 
 class Spree::ProductImport < Spree::Base 
   preference :upload_products, :boolean, default: false
@@ -7,7 +9,9 @@ class Spree::ProductImport < Spree::Base
 
 
   has_attached_file :csv_import, :path => ":rails_root/lib/etc/product_data/data-files/:basename.:extension"
-  validates_attachment :csv_import, presence: true, :content_type => { content_type: 'text/csv' }
+  validates_attachment :csv_import, presence: true, :content_type => { content_type: ['text/csv','text/comma-separated-values','text/csv','application/csv','application/excel','application/vnd.ms-excel','application/vnd.msexcel', "application/pdf","application/vnd.ms-excel",     
+                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]} 
 
   validates_inclusion_of :preferred_upload_variants, in: [true], if: lambda {|u| !u.preferred_upload_products },  message: "What are you doing Walt! Choose to Upload products or Variants!" 
   validates_inclusion_of :preferred_upload_products, in: [true], if: lambda {|u| !u.preferred_upload_variants },  message: "What are you doing Walt! Choose to Upload either products or Variants!"
@@ -15,19 +19,24 @@ class Spree::ProductImport < Spree::Base
 
   def add_products!
     import_products
+    header = @products_csv.row(1)
 
-    products = @products_csv.map { |product|  Spree::ImportProduct.new(product)  }
-    products.each do |product|
+    (2..@products_csv.last_row).each do |row| 
+      product = Spree::ImportProduct.new(Hash[[header.map(&:to_sym), @products_csv.row(row)].transpose])  
+      binding.pry
+
      new_product = Spree::Product.find_by(slug: product.slug)
      if new_product
        clean = product.instance_values.symbolize_keys.reject {|key, value| !Spree::Product.attribute_method?(key) || value.nil?}
        new_product.update_attributes(clean)
      else 
+
+     binding.pry
      new_product = Spree::Product.create!(name: product.name, description: product.description,
                                      meta_title: product.meta_title, meta_description: product.meta_description,
                                      meta_keywords: "#{product.slug}, #{product.name}, the Squirrelz",
                                      available_on: Time.zone.now, price: product.price, cost_price: product.price,
-                                     shipping_category: Spree::ShippingCategory.find_by!(name: 'Shipping'))
+                                     shipping_category: Spree::ShippingCategory.find_or_create_by!(name: 'Shipping'))
 
 
      end 
@@ -125,7 +134,7 @@ class Spree::ProductImport < Spree::Base
   end
   
   def import_products 
-    options = {headers: true, header_converters: :symbol, skip_blanks: true }
-    @products_csv = CSV.read(self.csv_import.path, options)
+    options = {headers: true, header_converters: :symbol, skip_blanks: true, encoding: 'ISO-8859-1', extension: :xls }
+    @products_csv =  Roo::Spreadsheet.open(self.csv_import.path, options)
   end
 end

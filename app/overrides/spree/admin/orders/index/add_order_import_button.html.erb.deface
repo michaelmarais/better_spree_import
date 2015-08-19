@@ -1,0 +1,2 @@
+<!-- insert_after 'erb:contains("content_for :page_actions do")' -->
+  <%= button_link_to 'Export Orders to CSV', spree.export_csv_path(q: params[:q], format: :xlsx), class: 'btn-primary change-href', id: 'export_csv', icon: "floppy-save" %>
