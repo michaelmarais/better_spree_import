@@ -2,11 +2,11 @@ require 'csv'
 require 'roo'
 
 class Spree::ProductImport < Spree::Base 
-  preference :translate_products, :boolean, default: false 
+  preference :add_products, :boolean, default: false 
+  preference :update_products, :boolean, default: false 
 
   has_attached_file :csv_import, :path => ":rails_root/lib/etc/product_data/data-files/:basename.:extension"
   validates_attachment :csv_import, presence: true, :content_type => { content_type: ['application/excel','application/vnd.ms-excel','application/vnd.msexcel', "application/pdf","application/vnd.ms-excel"  , "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]} 
-
 
 
   def add_products!
@@ -41,16 +41,37 @@ class Spree::ProductImport < Spree::Base
     end
   end
   
+
+  def update_products!
+    import_products
+    header = @products_csv.row(1)
+    (3..@products_csv.last_row).each do |row| 
+     product = Spree::ImportProduct.new(Hash[[header.map(&:to_sym), @products_csv.row(row)].transpose]) 
+      if product.slug.present? 
+        update_product = Spree::Product.find_by(slug: product.slug)
+        new_product.update_attributes(clean_product(product))
+        add_translations(update_product, product) 
+        add_product_taxons(product, update_product)
+        update_product.save!
+      else 
+        update_variant = Spree::Variant.find_by(sku: product.sku)
+        update_variant.attributes(clean_variant(product))
+        update_variant.stock_items.each do |stock_item|
+          Spree::StockMovement.create(quantity: product.stock_items_count, stock_item: stock_item) if product.stock_items_count
+        end 
+        update_variant.price = product.retail_price if product.retail_price.present?
+        add_option_type(product, update_variant)
+        update_variant.save! 
+      end 
+    end 
+  end 
+  
   def add_product_taxons(product, new_product) 
      taxons = product.instance_values.select {|key, value| key.match(/category_/) && value.present? }
      if taxons.present?
        new_taxons = taxons.each_value.map {|taxon_name| find_taxon(taxon_name)}
        new_taxons.map {|taxon| new_product.taxons.push(taxon) if find_taxon(taxon.try(:name)).present? && !new_product.taxons.include?(taxon) } 
      end 
-  end 
-
-  def update_products!
-
   end 
   
   def add_option_type(product, new_variant)
@@ -86,6 +107,10 @@ class Spree::ProductImport < Spree::Base
     variant.instance_values.symbolize_keys.reject {|key, value| !Spree::Variant.attribute_method?(key) || value.nil? }
   end 
 
+  def clean_product(product)
+    variant.instance_values.symbolize_keys.reject {|key, value| !Spree::Product.attribute_method?(key) || value.nil? }
+  end 
+
   def find_property(property)
     Spree::Property.joins(:translations).find_or_create_by(name: property, presentation: property)
   end 
@@ -99,6 +124,6 @@ class Spree::ProductImport < Spree::Base
   end
 
   def add_translations(new_product, product) 
-     product_translation = new_product.update_attributes(name: product.name_cn, description: product.description_cn, locale: :cn)
+     new_product.update_attributes(name: product.name_cn, description: product.description_cn, locale: :cn)
   end
 end
