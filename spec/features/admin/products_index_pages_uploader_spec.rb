@@ -6,7 +6,7 @@ describe "Products", type: :feature do
   let(:youxi_path) { Rails.root + "../../spec/fixtures/youxi.xlsx" }
   let!(:shipping) {create(:shipping_category, name: "Shipping")}
   let!(:taxonomy) {create(:taxonomy, name: "Designers")}
-  let!(:taxon) {create(:taxon, name: "Youxi", parent: taxonomy) }
+  let!(:taxon) {create(:taxon, name: "Youxi")}
   stub_authorization!
 
 
@@ -32,9 +32,10 @@ describe "Products", type: :feature do
       attach_file "product_import_csv_import", youxi_path
       click_button "Import"
       expect(page).to have_content("You have successfuly Imported products") 
-      binding.pry
       expect(Spree::Product.count).to eq 5 
       expect(Spree::Product.first.taxons).to include taxon
+      expect(Spree::Product.first.properties.count).to eq 1 
+      expect(Spree::Product.first.price.to_i).to eq 15 
     end
   end 
 end 

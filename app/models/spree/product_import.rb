@@ -30,11 +30,11 @@ class Spree::ProductImport < Spree::Base
                                      meta_keywords: "#{product.slug}, #{product.name_en}, the Squirrelz",
                                      meta_description: product.meta_description_en, meta_title: product.meta_title_en,
                                      available_on: Time.zone.now, price: product.retail_price, cost_price: product.retail_price,
-                                     shipping_category: Spree::ShippingCategory.find_or_create_by!(name: 'Shipping'))
+                                     shipping_category: Spree::ShippingCategory.find_or_create_by!(name: 'Shipping'),
+                                     slug: product.slug)
 
         add_translations(new_product, product) 
         new_product.tag_list = product.product_tags if product.product_tags.present?
-        new_product.slug = product.slug
         add_product_property(product, new_product)
         add_product_taxons(product, new_product)
         new_product.save!
@@ -87,7 +87,6 @@ class Spree::ProductImport < Spree::Base
   end 
 
   def add_product_property(product, new_product)
-   new_product = Spree::Product.find_by(slug: product.slug)
    product_properties  = product.instance_values.select { |key, value| key.match(/property_/) && value.present? }
    if product_properties.present?
      product_properties.map do |key, value| 

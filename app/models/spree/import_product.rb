@@ -4,8 +4,8 @@ module Spree
   class ImportProduct
     attr_accessor :name_en, :name_cn, :brand_en, :brand_cn, :vendors, 
                   :product_tags, :category_collection, :category_collection,
-                  :category_type, :category_sub_category, :property_style, 
-                  :property_gender, :property_material, :option_color, :option_size, :property_dimensions, 
+                  :category_type, :category_sub_category, :category_brand, :property_style, 
+                  :property_gender, :property_material, :option_color, :option_size, :property_dimensions,  
                   :weight, :weight_units, :description_en, :description_cn,
                   :stock_items_count, :retail_price, :slug, :squirrelz_sku, :meta_description_en, 
                   :meta_description_cn, :meta_title_en, :meta_title_cn, :vendor, :cost_currency
@@ -23,7 +23,8 @@ module Spree
       @cost_currency = "CNY"
       @product_tags = csv_row[:product_tags]
       @category_collection = csv_row[:category_collection]
-      @category_type, = csv_row[:category_type]
+      @category_type  = csv_row[:category_type]
+      @category_brand =  csv_row[:category_brand]
       @category_sub_category = csv_row[:category_sub_category]
       @property_gender = csv_row[:property_gender]
       @property_material = csv_row[:property_material]
