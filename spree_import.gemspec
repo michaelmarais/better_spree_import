@@ -4,16 +4,18 @@ require "spree_import/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "spree_import"
-  s.version     = "3.0.1"
-  s.authors     = ["dgross881"]
-  s.email       = ["dgross881@gmail.com"]
-  s.summary     = "Product Impoter for Spree"
-  s.description = "A simple Plugin to Import Products on Spree"
-  s.license     = "MIT"
+  s.platform     = Gem::Platform::RUBY
+  s.name         = "spree_import"
+  s.version      = "3.0.1"
+  s.author       = "dgross881"
+  s.email        = "dgross881@gmail.com"
+  s.summary      = "Product Impoter for Spree"
+  s.description  = "A simple Plugin to Import Products on Spree"
+  s.license      = "MIT"
   s.required_ruby_version = '>= 2.0.0'
 
- #  s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files        = `git ls-files`.split("\n")
+  s.test_files   = `git ls-files -- {test,spec,features}/*`.split("\n")
 
   s.require_path = 'lib'
   s.requirements << 'none'
