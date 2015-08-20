@@ -34,6 +34,7 @@ class Spree::ProductImport < Spree::Base
 
         add_translations(new_product, product) 
         new_product.tag_list = product.product_tags if product.product_tags.present?
+        new_product.slug = product.slug
         add_product_property(product, new_product)
         add_product_taxons(product, new_product)
         new_product.save!
@@ -49,7 +50,7 @@ class Spree::ProductImport < Spree::Base
      product = Spree::ImportProduct.new(Hash[[header.map(&:to_sym), @products_csv.row(row)].transpose]) 
       if product.slug.present? 
         update_product = Spree::Product.find_by(slug: product.slug)
-        new_product.update_attributes(clean_product(product))
+        update_product.update_attributes(clean_product(product))
         add_translations(update_product, product) 
         add_product_taxons(product, update_product)
         update_product.save!

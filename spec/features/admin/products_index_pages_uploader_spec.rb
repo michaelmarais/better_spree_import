@@ -19,7 +19,10 @@ describe "Products", type: :feature do
     it "successfully uploads all the products in the csv file" do 
       check "import-show-button"
       attach_file "product_import_csv_import", globalize_path
+      check "product_import_preferred_add_products"
       click_button "Import"
+      binding.pry
+      expect(Spree::Product.count).to eq (2)
     end
 
     it "successfully uploads product translations" do 
