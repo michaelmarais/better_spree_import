@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe Spree::ProductImport do 
-
+ let(:file_path) { Rails.root + "../../spec/fixtures/new_test.csv" }
+ let(:globalize_path) { Rails.root + "../../spec/fixtures/globalize.xlsx" }
  let!(:shipping) {create(:shipping_category, name: "Shipping")}
  let!(:taxon) {create(:taxon, name: "The Taxon") }
 
