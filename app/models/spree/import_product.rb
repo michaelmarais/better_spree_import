@@ -28,6 +28,7 @@ module Spree
       @category_sub_category = csv_row[:category_sub_category]
       @property_gender = csv_row[:property_gender]
       @property_material = csv_row[:property_material]
+      @property_demensions = csv_row[:property_dimensions]
       @property_style = csv_row[:property_style]
       @style = csv_row[:style]
       @weight = remove_zeros(csv_row[:width].to_f)
