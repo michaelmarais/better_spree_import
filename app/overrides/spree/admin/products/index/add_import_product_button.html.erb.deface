@@ -32,6 +32,5 @@ $(document).ready(function() {
     $check_boxes.prop('checked', false);
       $(this).prop('checked', true);
   }
-}
-
+)}
 </script>

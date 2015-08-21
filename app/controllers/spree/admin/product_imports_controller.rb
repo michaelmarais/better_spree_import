@@ -4,8 +4,8 @@ module Spree
       def create
         @product_import = Spree::ProductImport.create(csv_import_params)
         if @product_import.save
-          @product_import.add_products!
-          #add_or_update_products
+          add_or_update_products
+
           flash[:success] = "You have successfuly Imported products" 
           redirect_to admin_products_path
         else 
@@ -17,6 +17,7 @@ module Spree
 
     private 
 
+    
       def add_or_update_products
         if @product_import.preferred_update_products
           @product_import.update_products!
@@ -26,7 +27,7 @@ module Spree
       end 
 
       def csv_import_params
-        params.fetch(:product_import, {}).permit(:csv_import, :preferred_translate_products)
+        params.fetch(:product_import, {}).permit(:csv_import, :preferred_add_products, :preferred_update_products)
       end 
     end 
   end 
