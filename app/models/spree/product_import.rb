@@ -16,9 +16,9 @@ class Spree::ProductImport < Spree::Base
      product = Spree::ImportProduct.new(Hash[[header.map(&:to_sym), @products_csv.row(row)].transpose]) 
      product_found = Spree::Product.find_by(slug: product.slug.split)
      if product_found
-        new_variant = Spree::Variant.create(clean_variant(product))
+        new_variant = Spree::Variant.new(clean_variant(product))
         new_variant.product = product_found
-        new_variant.cost_price = product.retail_price
+        new_variant.price = product.retail_price
         add_option_type(product, new_variant)
         new_variant.stock_items.each do |stock_item|
           Spree::StockMovement.create(quantity: product.stock_items_count, stock_item: stock_item)
