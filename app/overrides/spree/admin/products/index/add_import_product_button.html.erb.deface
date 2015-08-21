@@ -27,10 +27,10 @@
 
 <script>
 $(document).ready(function() {
-  var $check_boxes = $('input[type=checkbox]');
-  $check_boxes.click(function() {
-    $check_boxes.prop('checked', false);
-      $(this).prop('checked', true);
-  }
-)}
+  $(".import-choice input:checkbox").click(function(){
+    var group = "input:checkbox[name='"+$(this).attr("name")+"']";
+    $(group).attr("checked",false);
+    $(this).attr("checked",true);
+  });
+});
 </script>
