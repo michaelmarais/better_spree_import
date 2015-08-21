@@ -15,7 +15,6 @@ group :test,:development do
   gem 'axlsx_rails'
   gem 'roo'
   gem 'roo-xls'
-#  gem 'spreadsheet'
 end
 
 gemspec
