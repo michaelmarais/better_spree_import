@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Products", type: :feature do
   let(:file_path) { Rails.root + "../../spec/fixtures/new_test.csv" }
   let(:globalize_path) { Rails.root + "../../spec/fixtures/globalize.xlsx" }
-  let(:youxi_path) { Rails.root + "../../spec/fixtures/youxi.xlsx" }
+  let(:youxi_path) { Rails.root + "../../spec/fixtures/Ekokami.xlsx" }
   let!(:shipping) {create(:shipping_category, name: "Shipping")}
   let!(:taxonomy) {create(:taxonomy, name: "Designers")}
   let!(:taxon) {create(:taxon, name: "Youxi")}

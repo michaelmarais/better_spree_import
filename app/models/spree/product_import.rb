@@ -24,6 +24,7 @@ class Spree::ProductImport < Spree::Base
           Spree::StockMovement.create(quantity: product.stock_items_count, stock_item: stock_item)
         end 
         new_variant.save!
+        binding.pry
      else 
 
        new_product = Spree::Product.create!(name: product.name_en, description: product.description_en,
@@ -82,6 +83,7 @@ class Spree::ProductImport < Spree::Base
       option_values.map do |key, value| 
         option_type = find_option_type(key.gsub(/option_/, "").capitalize) 
         option_value = Spree::OptionValue.joins(:translations).find_or_create_by!(option_type: option_type, name: value, presentation: value)
+        new_variant.product.option_types << option_type if !new_variant.product.option_types.include?(option_type) 
         new_variant.option_values << option_value
       end 
     end
