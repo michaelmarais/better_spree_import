@@ -14,7 +14,7 @@ module Spree
       #@is_master =  csv_row[:is_master].to_i
       @product_slug   =  csv_row[:product_slug]
       @csv_price =  remove_zeros(csv_row[:cost_price].to_i)
-      @cost_currenct   =  remove_zeros(csv_row[:cost_currency].to_i)
+      @cost_currency   =  remove_zeros(csv_row[:cost_currency].to_i)
       #@track_inventory =  csv_row[:track_inventory].to_i
       @tax_category_id =  remove_zeros(csv_row[:tax_category_id].to_i)
       @stock_items_count  =  remove_zeros(csv_row[:stock_items_count].to_i) 

@@ -1,5 +1,3 @@
-require 'date'
-
 module Spree
   class ImportProduct
     attr_accessor :name_en, :name_cn, :brand_en, :brand_cn, :vendors, 
@@ -11,40 +9,15 @@ module Spree
                   :meta_description_cn, :meta_title_en, :meta_title_cn, :vendor, :cost_currency
 
 
-    def initialize(csv_row)
-      @slug = csv_row[:slug]
-      @name_en = csv_row[:name_en] 
-      @name_cn = csv_row[:name_cn]
-      @brand_en = csv_row[:brand_en]
-      @brand_cn = csv_row[:brand_cn]
-      @vendors = csv_row[:vendors]
-      @option_color = csv_row[:option_color]
-      @option_size  = csv_row[:option_size]
+    def initialize(args)
       @cost_currency = "CNY"
-      @product_tags = csv_row[:product_tags]
-      @category_collection = csv_row[:category_collection]
-      @category_type  = csv_row[:category_type]
-      @category_brand =  csv_row[:category_brand]
-      @category_sub_category = csv_row[:category_sub_category]
-      @property_gender = csv_row[:property_gender]
-      @property_material = csv_row[:property_material]
-      @property_demensions = csv_row[:property_dimensions]
-      @property_style = csv_row[:property_style]
-      @style = csv_row[:style]
-      @weight = remove_zeros(csv_row[:width].to_f)
-      @weight_units = csv_row[:weight_units]
-      @description_en =  csv_row[:description_en]
-      @description_cn  = csv_row[:description_cn]
-      @meta_description_en = csv_row[:meta_description_en]
-      @meta_description_cn = csv_row[:meta_description_cn]
-      @meta_title_en = csv_row[:meta_title_en]
-      @meta_title_cn = csv_row[:meta_title_cn]
-      @stock_items_count = remove_zeros(csv_row[:stock_items_count].to_i) 
-      @retail_price = remove_zeros(csv_row[:retail_price].to_f)
-      @sku = csv_row[:sku]
-      @meta_description = csv_row[:meta_description]
-      @meta_title = csv_row[:meta_title]
-      @vendor  = csv_row[:vendor]
+      args.each do |k,v|
+        if k.include?("stock_items_count")
+          instance_variable_set("@#{k}", remove_zeros(v.to_i)) 
+        else 
+          instance_variable_set("@#{k}", v) 
+        end 
+      end
     end 
     
     def remove_zeros(csv)

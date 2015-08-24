@@ -16,7 +16,8 @@ class Spree::ProductImport < Spree::Base
     import_products
     header = @products_csv.row(1)
     (3..@products_csv.last_row).each do |row| 
-     product = Spree::ImportProduct.new(Hash[[header.map(&:to_sym), @products_csv.row(row)].transpose]) 
+     product = Spree::ImportProduct.new(Hash[[header, @products_csv.row(row)].transpose]) 
+     binding.pry
      product_found = Spree::Product.find_by(slug: product.slug.split)
      if product_found
         new_variant = Spree::Variant.new(clean_variant(product))
@@ -27,7 +28,6 @@ class Spree::ProductImport < Spree::Base
           Spree::StockMovement.create(quantity: product.stock_items_count, stock_item: stock_item)
         end 
         new_variant.save!
-        binding.pry
      else 
 
        new_product = Spree::Product.create!(name: product.name_en, description: product.description_en,
