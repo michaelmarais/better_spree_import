@@ -36,7 +36,7 @@ class Spree::ProductImport < Spree::Base
                                      shipping_category: Spree::ShippingCategory.find_or_create_by!(name: 'Shipping'),
                                      slug: product.slug)
 
-        new_product.designer = findd_designer(product.category_brand)
+        new_product.designer = find_designer(product.category_brand)
         new_product.master.price = product.retail_price
         add_translations(new_product, product) 
         new_product.tag_list = product.product_tags if product.product_tags.present?
