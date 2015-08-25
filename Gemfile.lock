@@ -87,7 +87,6 @@ PATH
   remote: .
   specs:
     spree_import (3.0.1)
-      axlsx_rails
       delayed_job_active_record
       rails (~> 4.2.2)
       roo (~> 2.1.0)
