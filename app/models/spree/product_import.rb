@@ -17,7 +17,6 @@ class Spree::ProductImport < Spree::Base
     header = @products_csv.row(1)
     (3..@products_csv.last_row).each do |row| 
      product = Spree::ImportProduct.new(Hash[[header, @products_csv.row(row)].transpose]) 
-     binding.pry
      product_found = Spree::Product.find_by(slug: product.slug.split)
      if product_found
         new_variant = Spree::Variant.new(clean_variant(product))
