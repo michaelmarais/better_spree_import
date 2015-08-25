@@ -34,7 +34,7 @@ class Spree::ProductImport < Spree::Base
                                      meta_description: product.meta_description_en, meta_title: product.meta_title_en,
                                      available_on: Time.zone.now, price: product.retail_price, cost_price: product.retail_price,
                                      shipping_category: Spree::ShippingCategory.find_or_create_by!(name: 'Shipping'),
-                                     slug: product.slug, designer: find_designer(product.category_brand)
+                                     slug: product.slug, designer: find_designer(product.category_brand))
 
         new_product.master.price = product.retail_price
         add_translations(new_product, product) 
