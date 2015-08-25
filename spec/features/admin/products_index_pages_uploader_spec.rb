@@ -30,6 +30,7 @@ describe "Products", type: :feature do
     it "successfully uploads product translations" do 
       check "import-show-button"
       attach_file "product_import_csv_import", youxi_path
+      check "product_import_preferred_add_products"
       click_button "Import"
       expect(page).to have_content("You have successfuly Imported products") 
       expect(Spree::Product.count).to eq 5 

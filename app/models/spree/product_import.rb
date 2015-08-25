@@ -36,6 +36,7 @@ class Spree::ProductImport < Spree::Base
                                      shipping_category: Spree::ShippingCategory.find_or_create_by!(name: 'Shipping'),
                                      slug: product.slug)
 
+        new_product.designer = findd_designer(product.category_brand)
         new_product.master.price = product.retail_price
         add_translations(new_product, product) 
         new_product.tag_list = product.product_tags if product.product_tags.present?
@@ -79,6 +80,7 @@ class Spree::ProductImport < Spree::Base
      end 
   end 
   
+
   def add_option_type(product, new_variant)
     option_values = product.instance_values.select { |key, value| key.match(/option_/) && value.present? }
     if option_values.present?
@@ -126,6 +128,10 @@ class Spree::ProductImport < Spree::Base
   
   def find_taxon(taxon)
     Spree::Taxon.joins(:translations).find_by(name: taxon) 
+  end
+
+  def find_designer(taxon_brand)
+   Spree::Designer.joins(:translations).find_by(name: taxon_brand)
   end
 
   def add_translations(new_product, product) 

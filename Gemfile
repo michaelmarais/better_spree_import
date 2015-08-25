@@ -12,10 +12,10 @@ group :test,:development do
   gem 'delayed_job_active_record'
   gem 'paperclip'
   gem 'acts-as-taggable-on'
-  gem 'axlsx_rails'
+  gem 'axlsx_rails' 
   gem 'roo'
+  gem 'zip-zip'
   gem 'roo-xls'
-  # gem 'zip-zip'
 end
 
 gemspec
