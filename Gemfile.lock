@@ -437,7 +437,6 @@ PLATFORMS
 
 DEPENDENCIES
   acts-as-taggable-on
-  axlsx_rails
   capybara
   coffee-rails
   database_cleaner
